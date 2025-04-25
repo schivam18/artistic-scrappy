@@ -1,0 +1,46 @@
+{% extends 'shop/basic.html' %}
+{% block title%} Payment Status - Artistic Scrappy{% endblock %}
+{% block body %}
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Payment Status</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Order ID: {{response.ORDER_ID}}</h5>
+                    {% if response.RESPCODE == '01' %}
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Payment Successful!</h4>
+                        <p>Thank you for your purchase. Your transaction has been completed successfully.</p>
+                        <hr>
+                        <p class="mb-0">Transaction ID: {{response.TXNID}}</p>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        <h4 class="alert-heading">Payment Failed!</h4>
+                        <p>We're sorry, but your transaction could not be processed.</p>
+                        <hr>
+                        <p class="mb-0">Reason: {{response.RESPMSG}}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mt-4">
+                        <a href="/shop" class="btn btn-primary">Continue Shopping</a>
+                        <a href="/shop/tracker" class="btn btn-outline-secondary">Track Order</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    {% if response.RESPCODE == '01' %}
+    // Clear cart if payment was successful
+    localStorage.removeItem('cart');
+    {% endif %}
+</script>
+{% endblock %}
